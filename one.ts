@@ -14,7 +14,7 @@ console.log(greeter(user))    //类型必须为字符串并且只能有一个参
 */
 interface Person {     //定义一个接口，定义传入的参数及参数类型
     firstName: string
-    lastName: string
+    lastName?: string    //可选属性
 }
 function greeter1(person: Person) {       //指定需要遵守的接口类型
     return 'hello ' + person.firstName + '=' + person.lastName
@@ -39,11 +39,11 @@ class User {
     }
 }
 
-interface Person {                 //定义一个接口，定义传入的参数及参数类型
+interface Person2 {                 //定义一个接口，定义传入的参数及参数类型
     firstName: string
     lastName: string
 }
-function greeter2(person: Person) {
+function greeter2(person: Person2) {
     return 'hello ' + person.firstName + '=' + person.lastName
 }
 let user2 = new User('tian', 'shang')
@@ -203,3 +203,23 @@ keepWholeObject2({ a: 'da' })                                   //b?  b可以不
 function keepWholeObject3({ a,b = 0} = {a: '11'}) :void{}       //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
 keepWholeObject3({ a: 'da' })                                   //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
 
+
+
+
+/*
+*  接口-定义只读类型
+*/
+interface Point {
+    readonly x: number
+    readonly y: number
+}
+let p1 : Point = {x:10, y:20 }
+// p1.x = 5         //readonly定义的只读类型不能再更改会报错
+
+// -----只读数组
+let a: number[] = [1, 2, 3]
+let ro: ReadonlyArray<number> = a        //进行类型转换成只读数组
+// ro[1] = 2          //不能在改变
+// ro[0].push(1)      //push方法也不能用
+// a = ro             //类型不匹配，也无法再重新赋值回去
+a = ro as number[]    //可通过类型断言来强制转换并赋值
