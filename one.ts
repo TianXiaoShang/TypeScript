@@ -30,6 +30,15 @@ console.log(greeter(user))    //传入对象
 /*
 *   通过类的方式定义一个接口，通过接口限制参数类型
 */
+
+interface Person2 {                 //定义一个接口，定义传入的参数及参数类型
+    firstName: string
+    lastName: string
+}
+function greeter2(person: Person2) {
+    return 'hello ' + person.firstName + '=' + person.lastName
+}
+
 class User {
     firstName: string
     lastName: string
@@ -39,13 +48,6 @@ class User {
     }
 }
 
-interface Person2 {                 //定义一个接口，定义传入的参数及参数类型
-    firstName: string
-    lastName: string
-}
-function greeter2(person: Person2) {
-    return 'hello ' + person.firstName + '=' + person.lastName
-}
 let user2 = new User('tian', 'shang')
 console.log(greeter(user))        //传入对象
 
@@ -60,7 +62,7 @@ let isLlist: number[] = [1, 2, 3]                //规定为数组并且全部�
 
 
 /*
-* 定义元组
+* 定义元组  ——  表示一个已知元素数量和类型的数组
 */
 let x: [string, number]          //定义元组 
 x = ['hello', 10]                //按照指定位置的数据类型定义，顺序跟数据类型都必须对应上
@@ -82,7 +84,7 @@ enum Color {
     Blue
 }
 
-let c: Color = Color.Green     // 2 --> 获取枚举值
+let c: Color = Color.Green           // 2 --> 获取枚举值
 let ColorName: string = Color[2]     // Green  --> 可以通过枚举值来反查   -- 编译原理 --> Color[Color["Red"] = 1] = "Red"  --> 给Color同时增加两个属性
 console.log(ColorName, c)
 
@@ -127,10 +129,6 @@ num1 = null
 function error(message: string): never {   //它必须有无法到达的终点，才不会报错
     throw new Error(message)
 }
-function fail() {
-    return error('something failed')
-}
-
 function inifiniteLoop(): never {           //它必须有无法到达的终点，才不会报错
     while (true) {
     }
@@ -143,8 +141,8 @@ function inifiniteLoop(): never {           //它必须有无法到达的终点�
 // declare function create(o: object | null): void;    //declare声明一个函数，并且没有返回值
 // create({ prop: 0 })
 // create(null)
-// create(4)           //error
-// create('string')    //error       
+// create(4)           //error 只能传object类型的值或者null 
+// create('string')    //error 只能传object类型的值或者null        
 
 
 
@@ -160,7 +158,7 @@ let strLength2: number = (someValue as string).length
 /*
 *  数组结构赋值
 */
-let input: [number, number] = [1, 2]           //下面形参使用了元祖类型的声明，则这里也必须声明为元祖类型
+let input: [number, number] = [1, 2]             //下面形参使用了元祖类型的声明，则这里也必须声明为元祖类型
 function f([first, second]: [number, number]) {
     console.log(first)
     console.log(second)
@@ -197,11 +195,11 @@ keepWholeObject({ a: 'da', b: 11 })
 *  函数传参默认值2(type语法)
 */
 type C = { a: string, b?: number }
-function keepWholeObject2({ a,b = 0} : C) :void{}               //这里可以用type单独定义规则后在这里使用，就不用写很长一串在这里
-keepWholeObject2({ a: 'da' })                                   //b?  b可以不传，但是a必须穿         
+function keepWholeObject2({ a, b = 0 }: C): void { }               //这里可以用type单独定义规则后在这里使用，就不用写很长一串在这里
+keepWholeObject2({ a: 'da' })                                      //b?  b可以不传，但是a必须传     
 
-function keepWholeObject3({ a,b = 0} = {a: '11'}) :void{}       //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
-keepWholeObject3({ a: 'da' })                                   //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
+function keepWholeObject3({ a, b = 0 } = { a: '11' }): void { }   //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
+keepWholeObject3({ a: 'da' })                                     //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
 
 
 
@@ -213,13 +211,75 @@ interface Point {
     readonly x: number
     readonly y: number
 }
-let p1 : Point = {x:10, y:20 }
+let p1: Point = { x: 10, y: 20 }
 // p1.x = 5         //readonly定义的只读类型不能再更改会报错
 
 // -----只读数组
 let a: number[] = [1, 2, 3]
 let ro: ReadonlyArray<number> = a        //进行类型转换成只读数组
-// ro[1] = 2          //不能在改变
+// ro[1] = 2          //不能再改变
 // ro[0].push(1)      //push方法也不能用
 // a = ro             //类型不匹配，也无法再重新赋值回去
 a = ro as number[]    //可通过类型断言来强制转换并赋值
+
+//------只读对象
+let p2: Point = { x: 10, y: 20 };     //point代表对象及中的属性不可被修改
+//  ps:一般来讲，针对变量我们用const，针对属性我们用欧冠Readonly
+
+/*
+*  接口-额外属性检查
+*/
+interface Square {                 //返回值的类型检查接口
+    color: string
+    area: number
+}
+interface SquareConfig {
+    color?: string
+    width?: number
+    [propName: string]: any    //这种方式表示允许其他多余属性传入并且可以是任意类型，可以解决使用对象字面量传参时多余属性的类型检查报错
+}
+function createSquare(config: SquareConfig): Square {
+    let newSquare = { color: 'white', area: 100 }
+    if (config.color) {
+        newSquare.color = config.color
+    }
+    if (config.width) {
+        newSquare.area = config.width * config.width
+    }
+    return newSquare
+}
+let config = {        //这样传值只需要接口指定的属性类型对应即可；不会特别严格；
+    color:'black',
+    age:50,
+    width: 100
+}
+let mySquare = createSquare({ color: 'black', width: 100})    //这种对象字面量的传参会更严格的检查，不允许传递多余的参数，会报错。
+// let mySquare = createSquare({ color: 'black', width: 100, age: 35})    //如上propName可以帮助我们传多余的任意类型的参数
+// let mySquare = createSquare({ color: 'black', width: 100, age:50 } as SquareConfig)    //通过类型断言可以避开这种检查，但是这并不是最好的解决办法；
+// 另外尽管使用非对象字面量传参的方式可以避开检查，但是我们使用ts的意义并不是来满足ts不报错，所以我们真正使用的时候哪怕他不会报错，我们都应在接口里面定义预料之中的值或者propName来进行规则的定义，以使得代码更加严谨！
+
+
+
+/*
+*  接口-函数类型
+*/
+interface SearchFunc {                    //定义一个函数的参数和返回值类型
+    (source:string,subString:string):boolean
+}
+let mySearch : SearchFunc
+mySearch = function(src: string, sub: string):boolean{    //这里的参数名只要顺序对应也可以，不需要对应形参名一样，后面的boolean定义也可以不要；
+    let result = src.search(sub)
+    return result > -1
+}
+
+
+
+/*
+*  接口-索引类型
+*/
+interface StringArray {
+    [index: number]: string
+}
+let myArray: StringArray
+myArray = ['bob', 'fred']
+let myStr: string = myArray[0]

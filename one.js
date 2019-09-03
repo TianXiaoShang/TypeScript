@@ -154,3 +154,27 @@ function keepWholeObject3(_a) {
     var _b = _a === void 0 ? { a: '11' } : _a, a = _b.a, _c = _b.b, b = _c === void 0 ? 0 : _c;
 } //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
 keepWholeObject3({ a: 'da' }); //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
+var p1 = { x: 10, y: 20 };
+// p1.x = 5         //readonly定义的只读类型不能再更改会报错
+// -----只读数组
+var a = [1, 2, 3];
+var ro = a; //进行类型转换成只读数组
+// ro[1] = 2          //不能再改变
+// ro[0].push(1)      //push方法也不能用
+// a = ro             //类型不匹配，也无法再重新赋值回去
+a = ro; //可通过类型断言来强制转换并赋值
+function createSquare(config) {
+    var newSquare = { color: 'white', area: 100 };
+    if (config.color) {
+        newSquare.color = config.color;
+    }
+    if (config.width) {
+        newSquare.area = config.width * config.width;
+    }
+    return newSquare;
+}
+// let config = {
+//     color:'black',
+//     width: 100
+// }
+var mySquare = createSquare({ color: 'black', width: 100 });
