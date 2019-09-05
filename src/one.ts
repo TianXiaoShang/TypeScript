@@ -1,3 +1,7 @@
+// 首先，ts编译后产生新的js文件会与当前ts文件造成命名冲突而导致编辑器报错。
+// 解决方案一，使用tsconfig.json配置文件，解决方案二：运行tsc命令时加上tsc --init生成配置文件
+/* 另外使用配置文件后，再次编译时不需要再写文件名，而且一旦写了则会忽略配置文件 */
+
 /*
 *   定义参数类型
 */
@@ -6,7 +10,6 @@ function greeter(person: string) {
 }
 let user = 'shang'
 console.log(greeter(user))    //类型必须为字符串并且只能有一个参数
-
 
 
 /*
@@ -249,11 +252,11 @@ function createSquare(config: SquareConfig): Square {
     return newSquare
 }
 let config = {        //这样传值只需要接口指定的属性类型对应即可；不会特别严格；
-    color:'black',
-    age:50,
+    color: 'black',
+    age: 50,
     width: 100
 }
-let mySquare = createSquare({ color: 'black', width: 100})    //这种对象字面量的传参会更严格的检查，不允许传递多余的参数，会报错。
+let mySquare = createSquare({ color: 'black', width: 100 })    //这种对象字面量的传参会更严格的检查，不允许传递多余的参数，会报错。
 // let mySquare = createSquare({ color: 'black', width: 100, age: 35})    //如上propName可以帮助我们传多余的任意类型的参数
 // let mySquare = createSquare({ color: 'black', width: 100, age:50 } as SquareConfig)    //通过类型断言可以避开这种检查，但是这并不是最好的解决办法；
 // 另外尽管使用非对象字面量传参的方式可以避开检查，但是我们使用ts的意义并不是来满足ts不报错，所以我们真正使用的时候哪怕他不会报错，我们都应在接口里面定义预料之中的值或者propName来进行规则的定义，以使得代码更加严谨！
@@ -264,10 +267,10 @@ let mySquare = createSquare({ color: 'black', width: 100})    //这种对象字�
 *  接口-函数类型
 */
 interface SearchFunc {                    //定义一个函数的参数和返回值类型
-    (source:string,subString:string):boolean
+    (source: string, subString: string): boolean
 }
-let mySearch : SearchFunc
-mySearch = function(src: string, sub: string):boolean{    //这里的参数名只要顺序对应也可以，不需要对应形参名一样，后面的boolean定义也可以不要；
+let mySearch: SearchFunc
+mySearch = function (src: string, sub: string): boolean {    //这里的参数名只要顺序对应也可以，不需要对应形参名一样，后面的boolean定义也可以不要；
     let result = src.search(sub)
     return result > -1
 }
