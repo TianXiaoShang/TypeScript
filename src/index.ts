@@ -1,6 +1,3 @@
-// 首先，ts编译后产生新的js文件会与当前ts文件造成命名冲突而导致编辑器报错。
-// 解决方案一，使用tsconfig.json配置文件，解决方案二：运行tsc命令时加上tsc --init生成配置文件
-/* 另外使用配置文件后，再次编译时不需要再写文件名，而且一旦写了则会忽略配置文件 */
 
 /*
 *   定义参数类型
@@ -9,7 +6,7 @@ function greeter(person: string) {
     return 'hello ' + person
 }
 let user = 'shang'
-console.log(greeter(user))    //类型必须为字符串并且只能有一个参数
+console.log(greeter(user))     //类型必须为字符串并且只能有一个参数
 
 
 /*
@@ -17,7 +14,7 @@ console.log(greeter(user))    //类型必须为字符串并且只能有一个参
 */
 interface Person {     //定义一个接口，定义传入的参数及参数类型
     firstName: string
-    lastName?: string    //可选属性
+    lastName?: string    //可选属性 
 }
 function greeter1(person: Person) {       //指定需要遵守的接口类型
     return 'hello ' + person.firstName + '=' + person.lastName
@@ -26,7 +23,7 @@ let user1 = {
     firstName: 'shang',
     lastName: 'tian'
 }
-console.log(greeter(user))    //传入对象 
+console.log(greeter1(user1))    //传入对象 
 
 
 
@@ -50,9 +47,8 @@ class User {
         this.lastName = lastName
     }
 }
-
 let user2 = new User('tian', 'shang')
-console.log(greeter(user))        //传入对象
+console.log(greeter2(user2))        //传入对象
 
 
 
@@ -109,7 +105,7 @@ let list: any[] = [1, true, 'free']    //未知数组时可以使用
 function warnUser(): void {
     console.log('This i my waring message')
 }
-let unusble: void = null                  //声明一个值为void是没有意义的，而且除了赋值null和undefined会报错
+// let unusble: void = null                  //声明一个值为void是没有意义的，而且除了赋值null和undefined会报错
 let unusble2: void = undefined            //另外null跟undefined分别也是两种数据类型，且该数据类型的值为且仅为自身
 
 
@@ -118,8 +114,9 @@ let unusble2: void = undefined            //另外null跟undefined分别也是�
 * 父子类型与联合类型
 */
 let num: number = 3
-num = null               // --stricNullChecks    在运行tsc命令时不做该处理不会报错，我们知道undefined跟null是所有类型的子类型，
+// num = null               // --stricNullChecks    在运行tsc命令时不做该处理不会报错，我们知道undefined跟null是所有类型的子类型，
 // 而作为子类型是可以赋值给父类型的。这也就解释了为什么null跟undefined可以赋值给void类型
+//但是这里我们通过strictNullChecks严格模式防止了这种事情发生，所以同样会报错
 
 let num1: number | null = 3     //使用联合类型即可在--stricNullChecks模式下正常执行
 num1 = null
@@ -159,7 +156,7 @@ let strLength2: number = (someValue as string).length
 
 
 /*
-*  数组结构赋值
+*  数组解构赋值
 */
 let input: [number, number] = [1, 2]             //下面形参使用了元祖类型的声明，则这里也必须声明为元祖类型
 function f([first, second]: [number, number]) {
@@ -171,7 +168,7 @@ f(input)
 
 
 /*
-*  对象结构赋值
+*  对象解构赋值
 */
 let o = {
     a: 'foo',
@@ -202,7 +199,7 @@ function keepWholeObject2({ a, b = 0 }: C): void { }               //这里可�
 keepWholeObject2({ a: 'da' })                                      //b?  b可以不传，但是a必须传     
 
 function keepWholeObject3({ a, b = 0 } = { a: '11' }): void { }   //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
-keepWholeObject3({ a: 'da' })                                     //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
+keepWholeObject3({ a: 'da'})                                     //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
 
 
 
@@ -217,6 +214,7 @@ interface Point {
 let p1: Point = { x: 10, y: 20 }
 // p1.x = 5         //readonly定义的只读类型不能再更改会报错
 
+
 // -----只读数组
 let a: number[] = [1, 2, 3]
 let ro: ReadonlyArray<number> = a        //进行类型转换成只读数组
@@ -225,9 +223,11 @@ let ro: ReadonlyArray<number> = a        //进行类型转换成只读数组
 // a = ro             //类型不匹配，也无法再重新赋值回去
 a = ro as number[]    //可通过类型断言来强制转换并赋值
 
+
 //------只读对象
 let p2: Point = { x: 10, y: 20 };     //point代表对象及中的属性不可被修改
 //  ps:一般来讲，针对变量我们用const，针对属性我们用欧冠Readonly
+
 
 /*
 *  接口-额外属性检查
@@ -251,7 +251,7 @@ function createSquare(config: SquareConfig): Square {
     }
     return newSquare
 }
-let config = {        //这样传值只需要接口指定的属性类型对应即可；不会特别严格；
+let config = {        //这样传值只需要接口指定的属性类型对应满足即可；不会特别严格；
     color: 'black',
     age: 50,
     width: 100
@@ -286,3 +286,56 @@ interface StringArray {
 let myArray: StringArray
 myArray = ['bob', 'fred']
 let myStr: string = myArray[0]
+
+
+/* 
+* 字面量约束
+*/
+let mySex :"男" | "女";    //只能取其中的值
+mySex = "女"
+
+
+
+/*
+*  类型别名  对已知的一些类型定义名称,Jianhua 
+*/
+type Gender = '男' | '女'
+type isUser = {
+    name: string
+    age: number
+    gender: Gender
+}
+let u:isUser
+u = {
+    name:'shang',
+    gender:'男',
+    age:19
+}
+function getUsers():User[]{
+    return []
+}
+
+
+/*
+*  函数重载   在函数调用前对函数的多种可能进行声明，以约束函数的返回结果在可控范围内同时帮助ts更好的检查类型
+*/
+/**
+ * 得到a*b的结果
+ * @param a 
+ * @param b 
+ */
+function combine(a:number, b:number): number;
+/**
+ * 得到a拼接b的结果
+ */
+function combine(a:string, b:string): string;
+function combine(a:number|string, b:number|string): number|string{
+    if(typeof a == 'number' && typeof b == 'number'){
+        return a * b
+    }
+    else if(typeof a == 'string' && typeof b == 'string'){
+        return a + b
+    }
+    throw Error('参数传递错误！')
+}
+const combineResult = combine('1','2')     //当以上进行函数重载后，此处不符合两种传参规则的情况都将会报错，并且此时ts已经可以准确的判断返回值为number或者string

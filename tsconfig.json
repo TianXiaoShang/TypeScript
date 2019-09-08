@@ -6,10 +6,10 @@
     "target": "es2016",              //指定版本的编译标准，不同版本可能会有一些差异，一般用es7也就是es2016
     "module": "commonjs",            //编译目标的使用的模块化标准
     "lib":["es2016"],                //ts代码中使用的环境，默认为浏览器环境，提示中会有document等,去掉dom环境则console等都会报错
-    // 如果既不想用dom又想用一些console等node对象，可以使用(包含node环境的对象)官方库@types/node（cnpm i -D @types/node），另外@types/jquery等库，这些库都是用来描述对应的库的类型的，以更好的把js库拿到ts中来使用
-    "outDir":"./dist"                 //指定编译结果文件的目录
-
-
+    // 如果既不想用dom环境又想用一些console等对象，可以使用(包含node环境的对象)官方库@types/node（cnpm i -D @types/node），另外@types/jquery等库，这些库@types/xxx都是用来描述对应的库的类型定义的，以更好的把js库拿到ts中来使用
+    "outDir":"./dist",                 //指定编译结果文件的目录
+    "strictNullChecks":true,         //更加严格的类型检查，以防止任意类型的子类undefined、null可以赋值给任意类型，造成安全隐患
+  
     
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
