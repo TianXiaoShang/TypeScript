@@ -187,7 +187,7 @@ console.log(isa, isb, rest)
 function keepWholeObject(wholeObject: { a: string, b?: number }) {    //b?意思是b可以不传
     let { a, b = 1001 } = wholeObject
 }
-keepWholeObject({ a: 'da', b: 11 })
+keepWholeObject({ a: 'da', b: 11 }) 
 
 
 
