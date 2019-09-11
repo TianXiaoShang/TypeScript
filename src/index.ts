@@ -73,22 +73,6 @@ console.log(x[0].substr(1))
 // x[6].substr()                   //报错，与上反之
 
 
-
-/*
-* 定义枚举
-*/
-enum Color {
-    Red = 1,        //自定义编号
-    Green = 2,
-    Blue
-}
-
-let c: Color = Color.Green           // 2 --> 获取枚举值
-let ColorName: string = Color[2]     // Green  --> 可以通过枚举值来反查   -- 编译原理 --> Color[Color["Red"] = 1] = "Red"  --> 给Color同时增加两个属性
-console.log(ColorName, c)
-
-
-
 /*
 * 定义any，如下例子都不报错，也就是随意数据类型，在不确定的时候使用，ts会跳过检查。
 */
@@ -339,3 +323,33 @@ function combine(a:number|string, b:number|string): number|string{
     throw Error('参数传递错误！')
 }
 const combineResult = combine('1','2')     //当以上进行函数重载后，此处不符合两种传参规则的情况都将会报错，并且此时ts已经可以准确的判断返回值为number或者string
+
+
+
+
+
+/*
+* 定义枚举，枚举的值只能是字符串或者数字，不能为其他
+* 
+*/
+enum Color {
+    Red = 1,        //自定义编号,左边为逻辑涵义，右边则为真实的值
+    Green = 2,
+    Blue
+}
+
+let c: Color = 3                     // 数字枚举的变量可以直接赋值为数字，但不提倡这样做
+let d: Color = Color.Green           // 2 --> 获取枚举值
+let e: Color = Color.Blue            // 3 ---> 数字枚举会自动递增，如果第一个都没有就是从0开始
+let ColorName: string = Color[2]     // Green  --> (仅数字枚举)可以通过枚举值来反查   -- 编译原理 --> Color[Color["Red"] = 1] = "Red"  --> 给Color同时增加两个属性
+console.log(ColorName, c, d, e)
+/**
+ * 关于枚举补充--首先解决改变字面内容同时要改变很多后面赋值的逻辑内容的地方，产生很多的修改操作；
+ * 其次最重要的他解决了如下定义范围在编译后消失的问题（在js中找不到我们所定义的EmunGender的取值范围，ts被编译后是不存在的；失去了他反过来查询可选范围的功能）
+ * 枚举是会存在编译结果中的，是可查的，编译完为对象
+ */
+type EnumGender = '帅哥'| '美女'
+let enumGender: EnumGender
+enumGender = '帅哥'
+enumGender = '美女'
+function searchUsers(g:EnumGender){}
