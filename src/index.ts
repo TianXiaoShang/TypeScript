@@ -353,3 +353,51 @@ let enumGender: EnumGender
 enumGender = '帅哥'
 enumGender = '美女'
 function searchUsers(g:EnumGender){}
+
+/**
+ * 枚举-拓展知识，位运算（把数字换算成二进制后进行的运算）
+ */
+enum Permission {      //使用2的n次幂,巧妙的构成如下二进制表现规律
+    Read = 1,    //   => 0001
+    Write = 2,   //   => 0010
+    Create = 4,  //   => 0100
+    Delete = 8   //   => 1000
+} 
+// 1.如何组合权限
+// 使用或运算（位运算的一种）
+// 具体为把两者二进制的相同位数来进行比较，其中有一个为1（真）则返回真，如下
+// 0001
+// 或
+// 0010
+// 返回
+// 0011
+
+let p = Permission.Read | Permission.Write;
+p = p | Permission.Delete;     //也可以这样继续添加权限，最终为1011
+console.log(p,377)             // => 11 (打印出11，而11在二进制中表现为1011)
+
+//2.如何判断是否拥有某个权限
+function hasPermission (target:Permission,per:Permission){
+    // & 且运算（位运算的一种），与或运算相反，当二进制中对应的位数来比较最后返回布尔值，其比较的位数同时都为1则返回真，否则一个1也会返回假
+    // 如下判断p中是否拥有Write权限：
+    // 1011
+    // 且
+    // 0010
+    // 返回
+    // 0010
+    return (target & per) === per;
+}
+let per  = hasPermission(p,Permission.Read)
+console.log(per,391)         //打印为true
+
+// 3.如何删除某个权限
+// ^ 异或运算（位运算的一种），二进制中相同位数相同则取0，不同则取1；
+// 如下：给p去除Write权限
+// 1011
+// 异或
+// 0010
+// 返回
+// 1001
+p = p ^ Permission.Write;
+console.log(p,402)   // ==> 9 在二进制中表现为1001
+console.log(hasPermission(p,Permission.Write))   //false   删除成功
