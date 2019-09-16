@@ -401,3 +401,11 @@ console.log(per,391)         //打印为true
 p = p ^ Permission.Write;
 console.log(p,402)   // ==> 9 在二进制中表现为1001
 console.log(hasPermission(p,Permission.Write))   //false   删除成功
+
+
+
+/**
+ * 模块化，跟普通的es6标准一样使用
+ */
+import {sum,name} from './module'
+console.log(sum(2,4),name,407)
