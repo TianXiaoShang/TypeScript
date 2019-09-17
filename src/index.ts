@@ -405,7 +405,7 @@ console.log(hasPermission(p,Permission.Write))   //false   删除成功
 
 
 /**
- * 模块化，跟普通的es6标准一样使用
+ * 模块化，跟普通的es6标准一样使用（重点在编译后的模块化规范）
  */
 import {sum,name} from './module'
 console.log(sum(2,4),name,407)
