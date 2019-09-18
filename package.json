@@ -2,7 +2,7 @@
   "devDependencies": {
     "@types/node": "^12.7.4"
   },
-  "scripts":{
-    "dev":"nodemon --watch src -e ts --exec ts-node src/index.ts"
+  "scripts": {
+    "dev": "nodemon --watch src -e ts --exec ts-node src/index.ts"
   }
 }
