@@ -154,14 +154,14 @@ var Permission;
 })(Permission || (Permission = {}));
 let p = Permission.Read | Permission.Write;
 p = p | Permission.Delete;
-console.log(p, 377);
+console.log(p, 375);
 function hasPermission(target, per) {
     return (target & per) === per;
 }
 let per = hasPermission(p, Permission.Read);
-console.log(per, 391);
+console.log(per, 389);
 p = p ^ Permission.Write;
-console.log(p, 402);
+console.log(p, 400);
 console.log(hasPermission(p, Permission.Write));
 import { sum, name } from './module';
-console.log(sum(2, 4), name, 407);
+console.log(sum(2, 4), name, 409);

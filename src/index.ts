@@ -1,4 +1,3 @@
-
 /*
 *   定义参数类型
 */
@@ -30,7 +29,6 @@ console.log(greeter1(user1))    //传入对象
 /*
 *   通过类的方式定义一个接口，通过接口限制参数类型
 */
-
 interface Person2 {                 //定义一个接口，定义传入的参数及参数类型
     firstName: string
     lastName: string
@@ -189,7 +187,6 @@ keepWholeObject3({ a: 'da'})                                     //b可以不传
 
 
 
-
 /*
 *  接口-定义只读类型
 */
@@ -228,7 +225,7 @@ interface Square {                 //返回值的类型检查接口
 interface SquareConfig {
     color?: string
     width?: number
-    [propName: string]: any    //这种方式表示允许其他多余属性传入并且可以是任意类型，可以解决使用对象字面量传参时多余属性的类型检查报错
+    [propName: string]: any       //这种方式表示允许其他多余属性传入并且可以是任意类型，可以解决使用对象字面量传参时多余属性的类型检查报错
 }
 function createSquare(config: SquareConfig): Square {
     let newSquare = { color: 'white', area: 100 }
@@ -240,7 +237,7 @@ function createSquare(config: SquareConfig): Square {
     }
     return newSquare
 }
-let config = {        //这样传值只需要接口指定的属性类型对应满足即可；不会特别严格；
+let config = {         //这样传值只需要接口指定的属性类型对应满足即可；不会特别严格；
     color: 'black',
     age: 50,
     width: 100
@@ -286,7 +283,7 @@ mySex = "女"
 
 
 /*
-*  类型别名  对已知的一些类型定义名称,Jianhua 
+*  类型别名  对已知的一些类型定义名称,简化重复代码
 */
 type Gender = '男' | '女'
 type isUser = {
@@ -305,31 +302,30 @@ function getUsers():User[]{
 }
 
 
-/*
+
+/* 
 *  函数重载   在函数调用前对函数的多种可能进行声明，以约束函数的返回结果在可控范围内同时帮助ts更好的检查类型
-*/
-/**
- * 得到a*b的结果
+*/ 
+/** 
+ * 得到a*b的结果 
  * @param a 
  * @param b 
- */
-function combine(a:number, b:number): number;
-/**
- * 得到a拼接b的结果
- */
-function combine(a:string, b:string): string;
-function combine(a:number|string, b:number|string): number|string{
-    if(typeof a == 'number' && typeof b == 'number'){
-        return a * b
-    }
+ */ 
+function combine(a:number, b:number): number; 
+/** 
+ * 得到a拼接b的结果 
+ */ 
+function combine(a:string, b:string): string; 
+function combine(a:number|string, b:number|string): number|string{ 
+    if(typeof a == 'number' && typeof b == 'number'){ 
+        return a * b 
+    } 
     else if(typeof a == 'string' && typeof b == 'string'){
         return a + b
     }
     throw Error('参数传递错误！')
 }
 const combineResult = combine('1','2')     //当以上进行函数重载后，此处不符合两种传参规则的情况都将会报错，并且此时ts已经可以准确的判断返回值为number或者string
-
-
 
 
 
@@ -379,7 +375,7 @@ enum Permission {      //使用2的n次幂,巧妙的构成如下二进制表现�
 
 let p = Permission.Read | Permission.Write;
 p = p | Permission.Delete;     //也可以这样继续添加权限，最终为1011
-console.log(p,377)             // => 11 (打印出11，而11在二进制中表现为1011)
+console.log(p,375)             // => 11 (打印出11，而11在二进制中表现为1011)
 
 //2.如何判断是否拥有某个权限
 function hasPermission (target:Permission,per:Permission){
@@ -393,7 +389,7 @@ function hasPermission (target:Permission,per:Permission){
     return (target & per) === per;
 }
 let per  = hasPermission(p,Permission.Read)
-console.log(per,391)         //打印为true
+console.log(per,389)         //打印为true
 
 // 3.如何删除某个权限
 // ^ 异或运算（位运算的一种），二进制中相同位数相同则取0，不同则取1；
@@ -404,7 +400,7 @@ console.log(per,391)         //打印为true
 // 返回
 // 1001
 p = p ^ Permission.Write;
-console.log(p,402)   // ==> 9 在二进制中表现为1001
+console.log(p,400)   // ==> 9 在二进制中表现为1001
 console.log(hasPermission(p,Permission.Write))   //false   删除成功
 
 
@@ -412,7 +408,92 @@ console.log(hasPermission(p,Permission.Write))   //false   删除成功
 /**
  * 模块化，跟普通的es6标准一样使用（重点在编译后的模块化规范）
  */
-import {sum,name} from './module'
-console.log(sum(2,4),name,407)
+import { sum, name } from './module'
+console.log(sum(2,4),name,409)
 
+
+
+/**
+ * 接口类型，用来约束类，对象，函数（跟type类型别名差不多，暂时建议在约束对象时尽量都用interface）
+ */
+interface myUser{
+    name:string
+    age:string
+    sayHello:() => void
+}
+let isU:myUser = {
+    name:'sdfds',
+    age:'33',
+    sayHello(){
+        console.log('hello world')
+    }
+}
+isU.sayHello()
+
+/**
+ * 函数类型接口
+ * @param numbers 
+ * @param callBack 
+ * 显然，以下type跟interface两者都可以作为约束。但是更推荐interface接口类型
+ */
+// type Condition = (n:number)=>boolean
+interface Condition {
+    (n:number,i :number): boolean
+}
+function mySum(numbers:number[],callBack:Condition):number{
+    let s = 0;
+    numbers.forEach((n,i) =>{
+        if(callBack(n,i)){
+            s += n;
+        }
+    })
+    return s;
+}
+let s = mySum([1,2,2,3,1,4],(a) =>{         //这里可以只用一个参数，虽然规定传两个
+    return a > 2
+})
+console.log(s)
+
+
+/**
+ * 接口的继承(如下一看就懂)
+ * 可以通过多种接口组合新的契约
+ */
+interface AA {
+    T1:string
+}
+interface BB extends AA{
+    T2:number
+}
+interface CC extends AA,BB{
+    T3:boolean
+    // T1:number              //接口中子接口不能覆盖父接口的类型（除非类型不变）
+}
+let DD:CC={
+    T1:'ds',
+    T2:15,
+    T3:true
+}
+
+
+/**
+ * 类型别名实现“继承”
+ * 类型别名也可以通过交叉类型实现继承的效果，但是更推荐使用接口来完成
+ */
+type EE = {
+    T1:string
+}
+type FF = {
+    T2:number
+}
+type JJ = {
+    T3:boolean
+    // T1:number  //与接口不同，覆盖时不会报错，但是如果类型改变，最后的T1类型将会合并，导致赋值啥都不行。所以这是一个类型别名实现继承的缺点
+} & EE & FF       //交叉类型，实现继承.
+
+let HH:JJ={
+    T1:'dss',
+    T2:155,
+    T3:true
+}
 
