@@ -24,7 +24,7 @@ export default function () {
 // -- import * as fs from 'fs'
 // -- fs.readFileSync('./')        //这样就不会报错了
 
-// 而如上这两个写法都可以使用一个配置来代理。使得可以直接使用 import fs from 'fs'；
+// 而如上这两个写法都可以使用一个tsconfig中的配置来自动代替完成。使得可以直接使用 import fs from 'fs'；
 // -- "esModuleInterop": true,         //启用es模块化交互非es模块导出
 
 // 总是在ts书写代码时统一使用es6标准来导入和导出。最为科学。
