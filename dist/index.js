@@ -1,3 +1,4 @@
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -9,6 +10,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function greeter(person) {
     return 'hello ' + person;
 }
@@ -163,5 +165,42 @@ console.log(per, 389);
 p = p ^ Permission.Write;
 console.log(p, 400);
 console.log(hasPermission(p, Permission.Write));
-import { sum, name } from './module';
-console.log(sum(2, 4), name, 409);
+const module_1 = require("./module");
+console.log(module_1.sum(2, 4), module_1.name, 409);
+let isU = {
+    name: 'sdfds',
+    age: '33',
+    sayHello() {
+        console.log('hello world');
+    }
+};
+isU.sayHello();
+function mySum(numbers, callBack) {
+    let s = 0;
+    numbers.forEach((n, i) => {
+        if (callBack(n, i)) {
+            s += n;
+        }
+    });
+    return s;
+}
+let s = mySum([1, 2, 2, 3, 1, 4], (a) => {
+    return a > 2;
+});
+console.log(s);
+let DD = {
+    T1: 'ds',
+    T2: 15,
+    T3: true
+};
+let HH = {
+    T1: 'dss',
+    T2: 155,
+    T3: true
+};
+class classUser {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+}

@@ -171,7 +171,7 @@ console.log(isa, isb, rest)
 function keepWholeObject(wholeObject: { a: string, b?: number }) {    //b?意思是b可以不传
     let { a, b = 1001 } = wholeObject
 }
-keepWholeObject({ a: 'da', b: 11 }) 
+keepWholeObject({ a: 'da', b: 11 })
 
 
 
@@ -183,7 +183,7 @@ function keepWholeObject2({ a, b = 0 }: C): void { }               //这里可�
 keepWholeObject2({ a: 'da' })                                      //b?  b可以不传，但是a必须传     
 
 function keepWholeObject3({ a, b = 0 } = { a: '11' }): void { }   //默认参数，不仅传入的对象有默认参数，对象的属性也同时有默认参数
-keepWholeObject3({ a: 'da'})                                     //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
+keepWholeObject3({ a: 'da' })                                     //b可以不传，但a不能不传，因为上面默认对象中有a。一旦传了对象就必须包含a
 
 
 
@@ -207,7 +207,7 @@ let ro: ReadonlyArray<number> = a        //进行类型转换成只读数组
 a = ro as number[]    //可通过类型断言来强制转换并赋值
 
 type readOnly = {
-    readonly arr: readOnly []    //既不能重新赋值也不能更改数组元素
+    readonly arr: readOnly[]    //既不能重新赋值也不能更改数组元素
 }
 
 //------只读对象
@@ -277,7 +277,7 @@ let myStr: string = myArray[0]
 /* 
 * 字面量约束
 */
-let mySex :"男" | "女";    //只能取其中的值
+let mySex: "男" | "女";    //只能取其中的值
 mySex = "女"
 
 
@@ -291,13 +291,13 @@ type isUser = {
     age: number
     gender: Gender
 }
-let u:isUser
+let u: isUser
 u = {
-    name:'shang',
-    gender:'男',
-    age:19
+    name: 'shang',
+    gender: '男',
+    age: 19
 }
-function getUsers():User[]{
+function getUsers(): User[] {
     return []
 }
 
@@ -305,27 +305,27 @@ function getUsers():User[]{
 
 /* 
 *  函数重载   在函数调用前对函数的多种可能进行声明，以约束函数的返回结果在可控范围内同时帮助ts更好的检查类型
-*/ 
+*/
 /** 
  * 得到a*b的结果 
  * @param a 
  * @param b 
- */ 
-function combine(a:number, b:number): number; 
+ */
+function combine(a: number, b: number): number;
 /** 
  * 得到a拼接b的结果 
- */ 
-function combine(a:string, b:string): string; 
-function combine(a:number|string, b:number|string): number|string{ 
-    if(typeof a == 'number' && typeof b == 'number'){ 
-        return a * b 
-    } 
-    else if(typeof a == 'string' && typeof b == 'string'){
+ */
+function combine(a: string, b: string): string;
+function combine(a: number | string, b: number | string): number | string {
+    if (typeof a == 'number' && typeof b == 'number') {
+        return a * b
+    }
+    else if (typeof a == 'string' && typeof b == 'string') {
         return a + b
     }
     throw Error('参数传递错误！')
 }
-const combineResult = combine('1','2')     //当以上进行函数重载后，此处不符合两种传参规则的情况都将会报错，并且此时ts已经可以准确的判断返回值为number或者string
+const combineResult = combine('1', '2')     //当以上进行函数重载后，此处不符合两种传参规则的情况都将会报错，并且此时ts已经可以准确的判断返回值为number或者string
 
 
 
@@ -349,11 +349,11 @@ console.log(ColorName, c, d, e)
  * 其次最重要的他解决了如下定义范围在编译后消失的问题（在js中找不到我们所定义的EmunGender的取值范围，ts被编译后是不存在的；失去了他反过来查询可选范围的功能）
  * 枚举是会存在编译结果中的，是可查的，编译完为对象
  */
-type EnumGender = '帅哥'| '美女'
+type EnumGender = '帅哥' | '美女'
 let enumGender: EnumGender
 enumGender = '帅哥'
 enumGender = '美女'
-function searchUsers(g:EnumGender){}
+function searchUsers(g: EnumGender) { }
 
 /**
  * 枚举-拓展知识，位运算（把数字换算成二进制后进行的运算）
@@ -363,7 +363,7 @@ enum Permission {      //使用2的n次幂,巧妙的构成如下二进制表现�
     Write = 2,   //   => 0010
     Create = 4,  //   => 0100
     Delete = 8   //   => 1000
-} 
+}
 // 1.如何组合权限
 // 使用或运算（位运算的一种）
 // 具体为把两者二进制的相同位数来进行比较，其中有一个为1（真）则返回真，如下
@@ -375,10 +375,10 @@ enum Permission {      //使用2的n次幂,巧妙的构成如下二进制表现�
 
 let p = Permission.Read | Permission.Write;
 p = p | Permission.Delete;     //也可以这样继续添加权限，最终为1011
-console.log(p,375)             // => 11 (打印出11，而11在二进制中表现为1011)
+console.log(p, 375)             // => 11 (打印出11，而11在二进制中表现为1011)
 
 //2.如何判断是否拥有某个权限
-function hasPermission (target:Permission,per:Permission){
+function hasPermission(target: Permission, per: Permission) {
     // & 且运算（位运算的一种），与或运算相反，当二进制中对应的位数来比较最后返回布尔值，其比较的位数同时都为1则返回真，否则一个1也会返回假
     // 如下判断p中是否拥有Write权限：
     // 1011
@@ -388,8 +388,8 @@ function hasPermission (target:Permission,per:Permission){
     // 0010
     return (target & per) === per;
 }
-let per  = hasPermission(p,Permission.Read)
-console.log(per,389)         //打印为true
+let per = hasPermission(p, Permission.Read)
+console.log(per, 389)         //打印为true
 
 // 3.如何删除某个权限
 // ^ 异或运算（位运算的一种），二进制中相同位数相同则取0，不同则取1；
@@ -400,8 +400,8 @@ console.log(per,389)         //打印为true
 // 返回
 // 1001
 p = p ^ Permission.Write;
-console.log(p,400)   // ==> 9 在二进制中表现为1001
-console.log(hasPermission(p,Permission.Write))   //false   删除成功
+console.log(p, 400)   // ==> 9 在二进制中表现为1001
+console.log(hasPermission(p, Permission.Write))   //false   删除成功
 
 
 
@@ -409,22 +409,22 @@ console.log(hasPermission(p,Permission.Write))   //false   删除成功
  * 模块化，跟普通的es6标准一样使用（重点在编译后的模块化规范）
  */
 import { sum, name } from './module'
-console.log(sum(2,4),name,409)
+console.log(sum(2, 4), name, 409)
 
 
 
 /**
  * 接口类型，用来约束类，对象，函数（跟type类型别名差不多，暂时建议在约束对象时尽量都用interface）
  */
-interface myUser{
-    name:string
-    age:string
-    sayHello:() => void
+interface myUser {
+    name: string
+    age: string
+    sayHello: () => void
 }
-let isU:myUser = {
-    name:'sdfds',
-    age:'33',
-    sayHello(){
+let isU: myUser = {
+    name: 'sdfds',
+    age: '33',
+    sayHello() {
         console.log('hello world')
     }
 }
@@ -438,18 +438,18 @@ isU.sayHello()
  */
 // type Condition = (n:number)=>boolean
 interface Condition {
-    (n:number,i :number): boolean
+    (n: number, i: number): boolean
 }
-function mySum(numbers:number[],callBack:Condition):number{
+function mySum(numbers: number[], callBack: Condition): number {
     let s = 0;
-    numbers.forEach((n,i) =>{
-        if(callBack(n,i)){
+    numbers.forEach((n, i) => {
+        if (callBack(n, i)) {
             s += n;
         }
     })
     return s;
 }
-let s = mySum([1,2,2,3,1,4],(a) =>{         //这里可以只用一个参数，虽然规定传两个
+let s = mySum([1, 2, 2, 3, 1, 4], (a) => {         //这里可以只用一个参数，虽然规定传两个
     return a > 2
 })
 console.log(s)
@@ -460,19 +460,19 @@ console.log(s)
  * 可以通过多种接口组合新的契约
  */
 interface AA {
-    T1:string
+    T1: string
 }
-interface BB extends AA{
-    T2:number
+interface BB extends AA {
+    T2: number
 }
-interface CC extends AA,BB{
-    T3:boolean
+interface CC extends AA, BB {
+    T3: boolean
     // T1:number              //接口中子接口不能覆盖父接口的类型（除非类型不变）
 }
-let DD:CC={
-    T1:'ds',
-    T2:15,
-    T3:true
+let DD: CC = {
+    T1: 'ds',
+    T2: 15,
+    T3: true
 }
 
 
@@ -481,19 +481,44 @@ let DD:CC={
  * 类型别名也可以通过交叉类型实现继承的效果，但是更推荐使用接口来完成
  */
 type EE = {
-    T1:string
+    T1: string
 }
 type FF = {
-    T2:number
+    T2: number
 }
 type JJ = {
-    T3:boolean
+    T3: boolean
     // T1:number  //与接口不同，覆盖时不会报错，但是如果类型改变，最后的T1类型将会合并，导致赋值啥都不行。所以这是一个类型别名实现继承的缺点
 } & EE & FF       //交叉类型，实现继承.
 
-let HH:JJ={
-    T1:'dss',
-    T2:155,
-    T3:true
+let HH: JJ = {
+    T1: 'dss',
+    T2: 155,
+    T3: true
 }
 
+
+
+/**
+ * 类  class
+ * ts中类的属性需要使用属性列表首先定义，不允许随意给类添加未定义的属性；直接写在类中，写法如下：
+ */
+class classUser {
+    // 属性列表规定实例所能拥有的属性
+    name: string
+    age: number
+    gender:'男' | '女' = '男'    //默认的则可以不传递值，构造函数中也可以不写this.gender
+    pid?:string                 //可选属性
+    constructor(name:string, age:number) {
+        this.name = name;
+        this.age = age;
+        // this.gender = gender;
+        // this.pid = pid
+
+    }
+}
+const isu = new classUser('shang',12)
+isu.gender = '女'
+
+
+console.log(isu)

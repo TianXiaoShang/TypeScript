@@ -4,7 +4,7 @@
 
   "compilerOptions": {               //编译选项
     "target": "es2016",              //指定版本的编译标准，不同版本可能会有一些差异，一般用es7也就是es2016
-    "module": "commonjs",                 //编译（后）目标的使用的模块化标准，可以是es2015 || es6 || commonjs
+    "module": "commonjs",            //编译（后）目标的使用的模块化标准，可以是es2015 || es6 || commonjs
     "lib":["es2016"],                //ts代码中使用的环境，默认为浏览器环境，提示中会有document等,去掉dom环境则console等都会报错
     // 如果既不想用dom环境又想用一些console等对象，可以使用(包含node环境的对象)官方库@types/node（cnpm i -D @types/node），另外@types/jquery等库，这些库@types/xxx都是用来描述对应的库的类型定义的，以更好的把js库拿到ts中来使用
     "outDir":"./dist",               //指定编译结果文件的目录
@@ -13,7 +13,7 @@
     "esModuleInterop": true,         //启用es模块化交互非es模块导出（详情: ./src/module.ts解释说明）
     "noEmitOnError": true,           //严格编译模式，当发生ts类型等报错时，将不能编译。默认是错误也不会影响编译的；
     "moduleResolution":"node",       //使用node解析策略（就是按照什么规范去对应目录中找文件，几乎都是node策略，classic已经过时）
-
+    "strictPropertyInitialization":true,    //进行严格的属性初始化检查（如class类中的属性列表）
     
 
     /* Basic Options */
