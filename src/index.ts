@@ -505,20 +505,51 @@ let HH: JJ = {
  */
 class classUser {
     // 属性列表规定实例所能拥有的属性
-    name: string
+    readonly id: number
     age: number
     gender:'男' | '女' = '男'    //默认的则可以不传递值，构造函数中也可以不写this.gender
     pid?:string                 //可选属性
-    constructor(name:string, age:number) {
-        this.name = name;
-        this.age = age;
-        // this.gender = gender;
-        // this.pid = pid
 
+    private _publishNumber:number = 3     //(private私有访问修饰符表示属性只能在类中使用，无法在外面访问)每天一共可以发布的文章数量
+    currentNumner:number = 0    //当前可以发布的文章数量
+
+    constructor(public name:string, age:number) {    //这里的访问修饰符（公开的）是触发ts的语法糖，这种直接赋值没有经过任何处理的属性，可以使用这种简写，对比age属性省去两行代码；
+        this.age = age;
+        this.id = Math.random()
+        // this.gender = gender
+        // this.pid = pid
+    }
+    publish(title:string){
+        if(this.currentNumner < this._publishNumber){
+            console.log('发布一篇文章：' + title)
+            this.currentNumner ++
+        }else{
+            console.log('今日发布文章数量已达上限')
+        }
+    }
+
+    set publishNumber(value){               //访问器（间接控制私有属性，但是受到控制），用于控制属性的读取。是语法糖，其实还是调用函数返回结果,如isu.getpublishNumber()
+        if(value > 0 && value < 10){
+            this._publishNumber = value
+        }else[
+            this._publishNumber = 3    //默认三条
+        ]
+    }
+    get publishNumber(){
+        return Math.floor(this._publishNumber)
     }
 }
 const isu = new classUser('shang',12)
 isu.gender = '女'
-
-
+isu.publishNumber = -9
 console.log(isu)
+// 由私有属性控制只能发几张
+isu.publish('文章1')
+isu.publish('文章2')
+isu.publish('文章3')
+isu.publish('文章4')
+isu.publish('文章5')
+isu.publish('文章6')
+
+
+
