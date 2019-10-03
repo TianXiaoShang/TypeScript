@@ -552,4 +552,110 @@ isu.publish('文章5')
 isu.publish('文章6')
 
 
+/**
+ * 泛型，指附属于函数、类、接口、类型别名之上的类型
+ * 如下，一开始并不确定数组是什么类型组成，只有在调用的时候才知道什么类型，
+ * 此时用泛型约束，相当于类型变量的意思，也就是<T>，T是类型变量名,同样泛型也可以设置默认值，不过一般不用）
+ */
+function take<T = string>(arr:T[], n: number):T[]{
+    if(n > arr.length){
+        return arr;
+    }
+    const newArr:T[] = []
+    for (let i = 0; i < n; i++) {
+        newArr.push(arr[i]);
+    }
+    return newArr
+}
+const isArr = [2,3,4,5,6,7,8]
+const newArr = take<number>(isArr,2)    //如果不写<number>也是可以的，ts会根据传参isArr进行智能类型推导；
+console.log(newArr)
 
+/**
+ * 泛型在其他地方的使用
+ */
+type callbacks<T> = (n:T, i:number)=> boolean;         //这样使得该类型别名在任何数组时候都能用
+interface JKcallbacks<T> {(n:T, i:number):boolean}     //接口也能用泛型
+function filter<T>(arr:T[],callback:callbacks<T>):T[]{
+    const newArr:T[] = [];
+    arr.forEach((n,i)=> {
+        if(callback(n,i)){
+            newArr.push(n)
+        }
+    })
+    return newArr
+}
+
+const myArr = [3,5,4,6,8,5,4]
+console.log(filter(myArr,n => n%2 !== 0))    
+
+/**
+ * 类中的使用泛型
+ */
+class ArrayHelper <T>{
+    constructor(private arr:T[]){}     //这样传入T，这里定一个arr，达到所有操作都为一个类型的数组的目的
+
+    take(n: number):T[]{
+        if(n > this.arr.length){
+            return this.arr;
+        }
+        const newArr:T[] = []
+        for (let i = 0; i < n; i++) {
+            newArr.push(this.arr[i]);
+        }
+        return newArr
+    }
+    
+    private getRandom(min:number, max:number){
+        const dec = max - min;
+        return Math.floor(Math.random() * dec + min)
+    }
+
+    suffle(){
+        for (let i = 0; i < this.arr.length; i++) {
+            const targetIndex = this.getRandom(0,this.arr.length)
+            const temp = this.arr[i];
+            this.arr[i] = this.arr[targetIndex];
+            this.arr[targetIndex] = temp;
+        }
+    }
+}
+const helper =  new ArrayHelper<number>([3,5,4,6,8,2,6,88])
+helper.take(5)
+
+
+/**
+ * 对泛型的约束定义,如下例子，传入的类型可以是任意类型，但是必须满足一定的条件，用extends来进行定义约束类型；
+ */
+interface hasNameProperty {name: string}
+function nameToUpperCase<T extends hasNameProperty>(obj: T):T{
+    obj.name = obj.name
+    .split(' ')
+    .map(s => s[0].toUpperCase() + s.substr(1))
+    .join(' ')
+    return obj
+}
+const fx = {
+    name:'xiao shang',
+    age:22,
+    gender:'男'
+}
+const newFX = nameToUpperCase(fx)
+console.log(newFX)
+
+
+/**
+ * 多泛型,逗号隔开即可
+ */
+function mixinArray<T,K>(arr1:T[],arr2:K[]):(T|K)[]{     //将两个数组混合
+    // do some sting
+    if(arr1.length != arr2.length){
+        throw new Error('长度不等')
+    }
+    let result :(T|K)[] = []
+    for (let i = 0; i < arr1.length; i++) {
+        result.push(arr1[i]);
+        result.push(arr2[i]);
+    }
+    return result
+}    

@@ -201,6 +201,89 @@ let HH = {
 class classUser {
     constructor(name, age) {
         this.name = name;
+        this.gender = '男';
+        this._publishNumber = 3;
+        this.currentNumner = 0;
         this.age = age;
+        this.id = Math.random();
+    }
+    publish(title) {
+        if (this.currentNumner < this._publishNumber) {
+            console.log('发布一篇文章：' + title);
+            this.currentNumner++;
+        }
+        else {
+            console.log('今日发布文章数量已达上限');
+        }
+    }
+    set publishNumber(value) {
+        if (value > 0 && value < 10) {
+            this._publishNumber = value;
+        }
+        else
+            [
+                this._publishNumber = 3
+            ];
+    }
+    get publishNumber() {
+        return Math.floor(this._publishNumber);
+    }
+}
+const isu = new classUser('shang', 12);
+isu.gender = '女';
+isu.publishNumber = -9;
+console.log(isu);
+isu.publish('文章1');
+isu.publish('文章2');
+isu.publish('文章3');
+isu.publish('文章4');
+isu.publish('文章5');
+isu.publish('文章6');
+function take(arr, n) {
+    if (n > arr.length) {
+        return arr;
+    }
+    const newArr = [];
+    for (let i = 0; i < n; i++) {
+        newArr.push(arr[i]);
+    }
+    return newArr;
+}
+const isArr = [2, 3, 4, 5, 6, 7, 8];
+const newArr = take(isArr, 2);
+console.log(newArr);
+function filter(arr, callback) {
+    const newArr = [];
+    arr.forEach((n, i) => {
+        if (callback(n, i)) {
+            newArr.push(n);
+        }
+    });
+    return newArr;
+}
+const myArr = [3, 5, 4, 6, 8, 5, 4];
+console.log(filter(myArr, n => n % 2 !== 0));
+class ArrayHelper {
+    take(arr, n) {
+        if (n > arr.length) {
+            return arr;
+        }
+        const newArr = [];
+        for (let i = 0; i < n; i++) {
+            newArr.push(arr[i]);
+        }
+        return newArr;
+    }
+    getRandom(min, max) {
+        const dec = max - min;
+        return Math.floor(Math.random() * dec + min);
+    }
+    suffle(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            const targetIndex = this.getRandom(0, arr.length);
+            const temp = arr[i];
+            arr[i] = arr[targetIndex];
+            arr[targetIndex] = temp;
+        }
     }
 }
