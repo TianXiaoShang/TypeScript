@@ -531,9 +531,9 @@ class classUser {
     set publishNumber(value){               //访问器（间接控制私有属性，但是受到控制），用于控制属性的读取。是语法糖，其实还是调用函数返回结果,如isu.getpublishNumber()
         if(value > 0 && value < 10){
             this._publishNumber = value
-        }else[
+        }else{
             this._publishNumber = 3    //默认三条
-        ]
+        }
     }
     get publishNumber(){
         return Math.floor(this._publishNumber)
