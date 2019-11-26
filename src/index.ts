@@ -409,6 +409,7 @@ console.log(hasPermission(p, Permission.Write))   //false   删除成功
  * 模块化，跟普通的es6标准一样使用（重点在编译后的模块化规范）
  */
 import { sum, name } from './module'
+import { ENETRESET } from 'constants';
 console.log(sum(2, 4), name, 409)
 
 
@@ -659,3 +660,112 @@ function mixinArray<T,K>(arr1:T[],arr2:K[]):(T|K)[]{     //将两个数组混合
     }
     return result
 }    
+
+
+
+/**
+ * 接口继承类
+ * 当接口继承自一个拥有私有属性或受保护的属性的类时，只有他的子类能够实现它（如isImage，当然demo本身也可以实现test）
+ */
+class demo {
+    public name:any;
+    private age:any;     //只能是any，否则是要求初始化值的；
+}
+interface test extends demo{
+    select():void;
+}
+
+// error -> 报错,无法实现demo中的age属性
+// class image implements demo{
+//     select(){}
+//     public name = 1     //name为公共属性可以实现
+//     private age = 1     //age为私有属性，只有子类才能访问所以无法实现
+// }
+
+class isImage extends demo implements demo{
+    select(){}
+}
+
+
+/**
+ * private and protected
+ * 参数属性
+ */
+class priv {
+    private name:string
+    protected sex:string = ''
+    constructor(name){
+        this.name = name
+    }
+}
+class children extends priv{
+    constructor(public age:number){   //参数属性，这里使用public，private，protected等关键词声明的相当于默认声明了一个属性并使用该访问修饰符修饰
+        super('qiang.lu')
+        this.sex = 'male'             //protected关键词的属性在派生类可以访问
+    }
+}
+let myPerson = new children(12)
+console.log(myPerson,708)
+
+
+/**
+ * 存取器
+ * 
+ */
+let lock = '权限通过'
+class Employee{
+    private _fullName: string = '';
+    get fullName(): string{
+        return this._fullName;
+    }
+    set fullName(newName: string){
+        if( lock == '权限通过' ){
+            this._fullName = newName
+        }else {
+            console.log('您没有权限更改！')
+        }
+    }
+}
+let employee = new Employee();
+employee.fullName = 'Bob Smith';
+console.log(employee.fullName,730)
+
+
+abstract class abs{
+    abstract date:string;
+    abstract addDate():void;
+    // constructor(){}
+}
+class miniAbs extends abs{
+    date:string = '1'
+    addDate(){  }
+    constructor(){             // 派生类一旦声明constructor构造函数必须调用super
+        super()
+    }
+}
+let dep: abs = {date:'1',addDate:function (){}}    // 抽象类也可以当做接口使用
+// let a = new abs()    // 抽象类无法new成实例
+
+
+class Greeter {
+    static standardGreeting = "Hello, there";
+    greeting: string = '';
+    greet() {
+        if (this.greeting) {
+            return "Hello, " + this.greeting;
+        }
+        else {
+            return Greeter.standardGreeting;
+        }
+    }
+}
+
+let greeter11: Greeter;
+greeter11 = new Greeter();
+console.log(greeter11.greet());
+
+let greeterMaker: typeof Greeter = Greeter;
+greeterMaker.standardGreeting = "Hey there!";
+
+let greeter22: Greeter = new greeterMaker();
+console.log(greeter22.greet());
